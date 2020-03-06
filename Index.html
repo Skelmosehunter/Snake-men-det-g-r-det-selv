@@ -1,0 +1,176 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>simpelt snake spil</title>
+  <style>
+    canvas{
+      display: block;
+      position: absolut;
+      border: 1px solid #000;
+      margin: auto;
+       top: 0;
+       bottom: 0;
+       right: 0;
+       left: 0;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    //Constant
+    var cols=26, rows=26;
+    //IDs
+    var EMPTY=0, SNAKE=1, FRUTE=2;
+    //Directions 
+    var left=0, up=1, rigth=2, down=3;
+
+    var grid = {
+          width: null,
+          height: null,
+          _grid: null,
+
+          init: function(d, c, r) {
+                this.width = c; 
+                this.height = r;
+
+                this._grid = [];
+                for(var x=0; x <c; x++) {
+                  this._grid.push([]);
+                  for (var y=0; y < r; y++) {
+                    this._grid[x].push(d);
+
+                  }
+                }
+
+         },
+        set: function(val x, y) {
+             this._grid[x][y] =val;
+        },
+        get: function(x, y) { 
+            return this._grid[x][y];
+        },
+    }
+
+    var snake = {
+
+        direktion: null,
+        last: null 
+        _queue: null,
+
+        init: function(d, c, r) {
+            this.direktion = d;
+
+            this._queue = [];
+            this.insert(x, y);
+          },
+        insert: function(val x, y) {
+              this._queue.unshift({x:x, y:y});
+              this.last = this._queue[0];
+          },
+        remove: function() { 
+              return this._queue.pop();
+          },
+    }
+
+    function setfood() {
+      var EMPTY = [];
+      for (var x=0; x < grid.width; x++) {
+        for (var y=0; y < grid.height; y++) {
+          if (grid.get(x, y) === EMPTY) {
+            EMPTY.push({x:x, y:y});
+          }
+        }
+      }
+      var randpos = EMPTY[Math.floor(Math.random()*EMPTY.length)];
+      grid.set(FRUTE, randpos.x, randpos.y,);
+    }
+
+
+    //game objects
+    var canvas, ctx, keystate, frames;
+
+    function main() {}
+      canvas = document.captureEvents("canvas");
+      canvas.width = cols*20; 
+      canvas.height = rows*20;
+      ctx =canvas.getContext("2d");
+      document.body.appendChild(canvas);
+
+      frames = 0;
+      keystate = {};
+
+      init();
+      loop();
+      
+
+    function inti() {
+        grid.inti(EMPTY, cols, rows);
+
+        var sp = {x:Math.floor(cols/2), y:rows-1}; 
+        snake .inti(up, sp.x, sp.y);
+        grid.set(snake, sp.x, sp.y);
+
+        setfood();
+     }
+    function loop() {
+      update();
+      draw();
+
+      Window.requestAnemationFrame(loop, canvas);
+    }
+
+    function update() {
+      frames++;
+
+      if (frames%5 === 0) {
+        var nx = snake.last.x;
+        var my = snake.last.y;
+
+        switch (snake.direktion) {
+          case left:
+            nx--;
+            break;
+          case up:
+            ny--;
+            break;
+          case rigth:
+            nx++;
+            break;
+          case down:
+            ny++;
+            break;  
+        }
+      }
+    }
+
+    function draw() {
+      var tw = canvas.width/grid.width;
+      var th = canvas.height/grid.height;
+
+      for (var x=0; x < grid.width; x++) {
+        for (var y=0; y < grid.height; y++) {
+            switch (grid.get(x, y)) {
+              case EMPTY:
+              ctx.fillstyle = "#fff"
+              break;
+              case SNAKE:
+              ctx.fillstyle = "#0ff"
+              break;
+              case FRUTE:
+              ctx.fillstyle = "#f00"
+              break;
+            }
+            ctx.fillrect(x*tw, y*th, tw, th);
+          }
+
+          var tail = SNAKE
+        }
+     
+    }
+
+    main();
+
+
+  </script>
+  </body>
+</html>
